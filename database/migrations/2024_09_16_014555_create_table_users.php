@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string("name", 20);
             $table->string("email", 40)->unique();
             $table->string("password", 100);
-            $table->string("token", 100)->nullable();
-            $table->dateTime("email_verified_at")->nullable();
             $table->dateTime("last_login_at")->nullable();
             $table->boolean("active")->nullable()->default(null);
             $table->timestamps();

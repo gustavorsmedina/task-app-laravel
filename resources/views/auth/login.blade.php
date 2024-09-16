@@ -20,6 +20,8 @@
             @endif
 
             <button type="submit">Entrar</button>
+
+            <a href="{{ route("register") }}">Não tenho uma conta</a>
         </form>
     </main>
   </x-layouts.main-layout>
