@@ -45,51 +45,57 @@
                 </form>
             </div>
             <div>
-                <ul class="flex flex-col gap-8">
-                    @foreach ($tasks as $task)
-                        @php
-                            $now = \Carbon\Carbon::now();
-                            $taskDateTime = \Carbon\Carbon::createFromFormat(
-                                'Y-m-d H:i:s',
-                                $task->date . ' ' . $task->time,
-                            );
-                            $isPast = $taskDateTime->lessThan($now);
-                        @endphp
-                        <li
-                            class="p-2 bg-neutral-900 rounded-2xl border-[1px] border-solid {{ $task->status === 'DONE' ? 'border-green-700' : 'border-neutral-700' }}">
-                            <div class="flex items-center justify-between">
-                                <h2 class="text-xl {{ $isPast ? 'text-neutral-500' : 'text-neutral-200' }}">
-                                    {{ $task->title }}
-                                </h2>
-                                <span
-                                    class="py-1 px-2 rounded-2xl text-sm ml-4 {{ $isPast ? 'text-neutral-500 bg-neutral-900' : 'text-neutral-200 bg-neutral-800' }}">
-                                    {{ $task->date }} - {{ $task->time }}
-                                </span>
-                            </div>
-                            <p class="mt-4 {{ $isPast ? 'text-neutral-600' : 'text-neutral-300' }}">
-                                {{ $task->description }}
-                            </p>
-                            <div class="mt-4 flex justify-end gap-4">
-                                @if ($task->status === 'PENDING')
-                                    <form action="{{ route('mark_task_done', ['task' => $task->id]) }}" method="POST">
+                @if ($tasks->isEmpty())
+                    <span class="text-neutral-500 block text-center">Não há tarefas disponíveis.</span>
+                @else
+                    <ul class="flex flex-col gap-8">
+                        @foreach ($tasks as $task)
+                            @php
+                                $now = \Carbon\Carbon::now();
+                                $taskDateTime = \Carbon\Carbon::createFromFormat(
+                                    'Y-m-d H:i:s',
+                                    $task->date . ' ' . $task->time,
+                                );
+                                $isPast = $taskDateTime->lessThan($now);
+                            @endphp
+                            <li
+                                class="p-2 bg-neutral-900 rounded-2xl border-[1px] border-solid {{ $task->status === 'DONE' ? 'border-green-700' : 'border-neutral-700' }}">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-xl {{ $isPast ? 'text-neutral-500' : 'text-neutral-200' }}">
+                                        {{ $task->title }}
+                                    </h2>
+                                    <span
+                                        class="py-1 px-2 rounded-2xl text-sm ml-4 {{ $isPast ? 'text-neutral-500 bg-neutral-900' : 'text-neutral-200 bg-neutral-800' }}">
+                                        {{ $task->date }} - {{ $task->time }}
+                                    </span>
+                                </div>
+                                <p class="mt-4 {{ $isPast ? 'text-neutral-600' : 'text-neutral-300' }}">
+                                    {{ $task->description }}
+                                </p>
+                                <div class="mt-4 flex justify-end gap-4">
+                                    @if ($task->status === 'PENDING')
+                                        <form action="{{ route('mark_task_done', ['task' => $task->id]) }}"
+                                            method="POST">
+                                            @csrf
+                                            <button type="submit" class="text-green-500">
+                                                <img src="{{ asset('/svg/check.svg') }}" alt="Ícone de check">
+                                            </button>
+                                        </form>
+                                    @endif
+                                    <form action="{{ route('delete_task', ['task' => $task->id]) }}" method="POST">
                                         @csrf
-                                        <button type="submit" class="text-green-500">
-                                            <img src="{{ asset('/svg/check.svg') }}" alt="Ícone de check">
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500">
+                                            <img src="{{ asset('/svg/trash.svg') }}" alt="Ícone de lixeira">
                                         </button>
                                     </form>
-                                @endif
-                                <form action="{{ route('delete_task', ['task' => $task->id]) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-500">
-                                        <img src="{{ asset('/svg/trash.svg') }}" alt="Ícone de lixeira">
-                                    </button>
-                                </form>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
+                                </div>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
+
 
 
 
