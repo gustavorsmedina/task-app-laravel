@@ -8,6 +8,11 @@
     @vite('resources/css/app.css')
 </head>
 <body>
+    
+    @auth
+    <x-header />
+    @endauth
+
     {{ $slot }}
 </body>
 </html>
