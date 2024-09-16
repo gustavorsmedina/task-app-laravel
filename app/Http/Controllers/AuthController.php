@@ -35,7 +35,6 @@ class AuthController extends Controller
 
         $user = User::where("email", $crendentials["email"])
             ->where("active", true)
-            ->whereNotNull("email_verified_at")
             ->first();
 
         if (!$user) {
@@ -83,25 +82,28 @@ class AuthController extends Controller
             ],
             [
                 "name.required" => "O nome é obrigatório.",
-                "name.min" => "O email deve conter no mínimo 10 caracteres.",
+                "name.min" => "O nome deve conter no mínimo 10 caracteres.",
+
                 "email.required" => "O email é obrigatório.",
                 "email.email" => "O email deve ser válido.",
                 "email.max" => "O email deve conter no máximo 100 caracteres.",
                 "email.unique" => "O email cadastrado já existe.",
+
                 "password.required" => "A senha é obrigatória.",
                 "password.min" => "A senha deve conter no mínimo 3 caracteres.",
                 "password_confirmation.required" => "A senha é obrigatória.",
-                "password_confirmation.same" => "As senhas estão diferentes.",
+                "password_confirmation.same" => "As senhas não são iguais.",
             ]
         );
 
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->active = true;
         $user->password = bcrypt($request->password);
 
         $user->save();
 
-        return redirect()->route("home");
+        return redirect()->route("login")->with('success_message', 'Conta criada com sucesso.');;
     }
 }

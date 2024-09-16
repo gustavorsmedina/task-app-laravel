@@ -13,4 +13,9 @@ class User extends Authenticable
         "password",
         "token"
     ];
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }
